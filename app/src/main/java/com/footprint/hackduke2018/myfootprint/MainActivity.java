@@ -1,8 +1,14 @@
 package com.footprint.hackduke2018.myfootprint;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.MenuItem;
@@ -26,11 +32,22 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int PERMISSION_REQUEST = 0;
+    private static final int RESULT_LOAD_IMAGE = 1;
+    ImageView imgView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        imgView = (ImageView)findViewById(R.id.imgview);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
+        }
+
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
             StrictMode.ThreadPolicy policy = new
@@ -39,24 +56,21 @@ public class MainActivity extends AppCompatActivity {
         }
         final TextView txtView = (TextView) findViewById(R.id.txtContent);
         Button btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, Productpage.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                MainActivity.this.startActivity(myIntent);
 
-            }
-        });
 
         final TextView txtView2 = (TextView) findViewById(R.id.txtContent);
         Button btn2 = (Button) findViewById(R.id.button2);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageView imgView = (ImageView)findViewById(R.id.imgview);
-                imgView .setVisibility(View.VISIBLE);
-                imgView .setVisibility(View.GONE);
+
+
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+//
+//
+//                imgView.setVisibility(View.INVISIBLE);
+//                imgView.setVisibility(View.GONE);
 
             }
         });
@@ -81,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         SparseArray<Barcode> barcodes = detector.detect(frame);
 
         Barcode thisCode = barcodes.valueAt(0);
-
+        String brand = "";
         try {
             String url = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + thisCode.rawValue;
 
@@ -106,21 +120,50 @@ public class MainActivity extends AppCompatActivity {
 
             //print result
             JSONObject jObj = new JSONObject(response.toString());
-            String post_id = "test";
+            brand = "test";
             JSONArray arr = jObj.getJSONArray("items");
             for (int i = 0; i < arr.length(); i++)
             {
-                post_id = arr.getJSONObject(i).getString("brand");
+                brand = arr.getJSONObject(i).getString("brand");
             }
 
 
 
-            txtView.setText(post_id);
+            txtView.setText(brand);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        final String fBrand = brand;
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, Productpage.class);
+                myIntent.putExtra("key", fBrand); //Optional parameters
+                MainActivity.this.startActivity(myIntent);
+
+            }
+        });
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RESULT_LOAD_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+                    imgView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+                }
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -18,16 +18,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/cruelty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="The is where the product information goes"
             android:textColor="#000000"
             android:textSize="18sp" />
+
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
