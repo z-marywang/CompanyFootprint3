@@ -74,9 +74,9 @@ public class Productpage extends AppCompatActivity {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains(value)) {
-                    crueltyLabel.setText("Animal Cruelty: True");
+                    crueltyLabel.setText("Tests on animals");
                 } else {
-                    crueltyLabel.setText("Animal Cruelty: False");
+                    crueltyLabel.setText("Cruelty-free");
                 }
             }
 
