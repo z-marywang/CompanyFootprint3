@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
     ImageView imgView;
-
+    ImageView myImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,70 +79,85 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        ImageView myImageView = (ImageView) findViewById(R.id.imgview);
-        Bitmap myBitmap = BitmapFactory.decodeResource(
-                getApplicationContext().getResources(),
-                R.drawable.coke);
-        myImageView.setImageBitmap(myBitmap);
-
-        BarcodeDetector detector =
-                new BarcodeDetector.Builder(getApplicationContext())
-                        .setBarcodeFormats(Barcode.UPC_A)
-                        .build();
-        if(!detector.isOperational()){
-            txtView.setText("Could not set up the detector!");
-            return;
-        }
-
-        Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
-        SparseArray<Barcode> barcodes = detector.detect(frame);
-
-        Barcode thisCode = barcodes.valueAt(0);
-        String brand = "";
-        try {
-            String url = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + thisCode.rawValue;
-
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            // optional default is GET
-            con.setRequestMethod("GET");
-
-            //add request header
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            //print result
-            JSONObject jObj = new JSONObject(response.toString());
-            brand = "test";
-            JSONArray arr = jObj.getJSONArray("items");
-            for (int i = 0; i < arr.length(); i++)
-            {
-                brand = arr.getJSONObject(i).getString("brand");
-            }
-
-
-
-            txtView.setText("Barcode");
-            txtView.setTextSize(30);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        final String fBrand = brand;
+        myImageView = (ImageView) findViewById(R.id.imgview);
+//        Bitmap myBitmap = null;
+//        try {
+//            myBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        BitmapFactory.decodeResource(
+//                getApplicationContext().getResources(),
+//                R.drawable.coke);
+// ;
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bitmap myBitmap = null;
+                try {
+                    myBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                myImageView.setImageBitmap(myBitmap);
+
+                BarcodeDetector detector =
+                        new BarcodeDetector.Builder(getApplicationContext())
+                                .setBarcodeFormats(Barcode.UPC_A)
+                                .build();
+                if(!detector.isOperational()){
+                    txtView.setText("Could not set up the detector!");
+                    return;
+                }
+
+                Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+                SparseArray<Barcode> barcodes = detector.detect(frame);
+
+                Barcode thisCode = barcodes.valueAt(0);
+                String brand = "";
+                try {
+                    String url = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + thisCode.rawValue;
+
+                    URL obj = new URL(url);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                    // optional default is GET
+                    con.setRequestMethod("GET");
+
+                    //add request header
+                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(con.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    //print result
+                    JSONObject jObj = new JSONObject(response.toString());
+                    brand = "test";
+                    JSONArray arr = jObj.getJSONArray("items");
+                    for (int i = 0; i < arr.length(); i++)
+                    {
+                        brand = arr.getJSONObject(i).getString("brand");
+                    }
+
+
+
+                    txtView.setText("Barcode");
+                    txtView.setTextSize(30);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
                 Intent myIntent = new Intent(MainActivity.this, Productpage.class);
-                myIntent.putExtra("key", fBrand); //Optional parameters
+                myIntent.putExtra("key", brand); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
 
             }
