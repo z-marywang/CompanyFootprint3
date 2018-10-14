@@ -32,56 +32,57 @@ public class Productpage extends AppCompatActivity {
         Intent intent = getIntent();
         String value = intent.getStringExtra("key");
 
-
+        setTitle(value);
 
 
 
         View cPP = findViewById(R.id.contentProductPage);
-        TextView brandLabel = (TextView) cPP.findViewById(R.id.textView3);
-        brandLabel.setText(value);
 
         TextView crueltyLabel = (TextView) cPP.findViewById(R.id.cruelty);
 
-        String crueltyCo = "";
+//        String crueltyCo = "";
+//        try (BufferedReader reader = new BufferedReader(
+//                new InputStreamReader(getAssets().open("CrueltyCompanies.json")))) {
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                crueltyCo += line + '\n';
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            JSONObject jObj = new JSONObject(crueltyCo.toString());
+//
+//
+//            JSONArray companies = (JSONArray) jObj.getJSONArray("companies");
+//
+//
+//            for (int i = 0; i < companies.length(); i++)
+//            {
+//                if (companies.getJSONObject(i).toString().equals(value)) {
+//                    crueltyLabel.setText("Animal Cruelty: True");
+//                } else {
+//                    crueltyLabel.setText("Animal Cruelty: False");
+//                }
+//            }
+//
+//        } catch (Exception e ) {
+//            e.printStackTrace();
+//        }
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(getAssets().open("CrueltyCompanies.json")))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                crueltyCo += line + '\n';
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            JSONObject jObj = new JSONObject(crueltyCo.toString());
-
-
-            JSONArray companies = (JSONArray) jObj.getJSONArray("companies");
-
-
-            for (int i = 0; i < companies.length(); i++)
-            {
-                if (companies.getJSONObject(i).toString().equals(value)) {
+                if (line.contains(value)) {
                     crueltyLabel.setText("Animal Cruelty: True");
                 } else {
                     crueltyLabel.setText("Animal Cruelty: False");
                 }
             }
 
-        } catch (Exception e ) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-//        try (BufferedReader reader = new BufferedReader(
-//                new InputStreamReader(getAssets().open("CrueltyCompanies.json")))) {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                if (line.contains(value)) {
-//                    crueltyLabel.setText("Animal Cruelty: True");
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

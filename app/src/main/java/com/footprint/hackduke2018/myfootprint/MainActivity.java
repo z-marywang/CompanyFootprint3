@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
+    private static final int PICK_IMAGE = 100;
+    Uri imageUri;
     ImageView imgView;
 
 
@@ -60,21 +62,23 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView txtView2 = (TextView) findViewById(R.id.txtContent);
         Button btn2 = (Button) findViewById(R.id.button2);
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtView.setText("do something");
+                openGallery();
+            }
 
 
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+//                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(i, RESULT_LOAD_IMAGE);
 //
 //
 //                imgView.setVisibility(View.INVISIBLE);
 //                imgView.setVisibility(View.GONE);
 
-            }
-        });
 
+        });
 
         ImageView myImageView = (ImageView) findViewById(R.id.imgview);
         Bitmap myBitmap = BitmapFactory.decodeResource(
@@ -146,21 +150,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void openGallery() {
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case RESULT_LOAD_IMAGE:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String picturePath = cursor.getString(columnIndex);
-                    cursor.close();
-                    imgView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-                }
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+            imageUri = data.getData();
+            imgView.setImageURI(imageUri);
         }
     }
 
