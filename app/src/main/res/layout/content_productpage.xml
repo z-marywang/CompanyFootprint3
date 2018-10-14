@@ -14,6 +14,22 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/emissions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="The is where the donor information goes"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="The is where the donor information goes"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/donors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

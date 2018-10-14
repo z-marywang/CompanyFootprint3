@@ -41,6 +41,22 @@ public class Productpage extends AppCompatActivity {
         TextView crueltyLabel = (TextView) cPP.findViewById(R.id.cruelty);
 
         TextView donorLabel = (TextView) cPP.findViewById(R.id.donors);
+
+        TextView commitLabel = (TextView) cPP.findViewById(R.id.commit);
+
+
+        TextView emissionsLabel = (TextView) cPP.findViewById(R.id.emissions);
+
+        if (value.equals("Coca Cola")) {
+            commitLabel.setText("Commits to reducing agricultural emissions.");
+            emissionsLabel.setText("Currently emits 523 thousand metric tons of carbon dioxide.");
+        }
+        else {
+            commitLabel.setText("Does not commit to reducing agricultural emissions.");
+            emissionsLabel.setText("No data on emissions.");
+        }
+
+
 //        String crueltyCo = "";
 //        try (BufferedReader reader = new BufferedReader(
 //                new InputStreamReader(getAssets().open("CrueltyCompanies.json")))) {
