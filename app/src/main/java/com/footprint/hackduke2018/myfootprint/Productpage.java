@@ -75,10 +75,10 @@ public class Productpage extends AppCompatActivity {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains(value)) {
-                    crueltyLabel.setText("Animal Cruelty: True");
+                    crueltyLabel.setText("Tests on animals.");
                     break;
                 } else {
-                    crueltyLabel.setText("Animal Cruelty: False");
+                    crueltyLabel.setText("Animal cruelty free.");
                 }
             }
 
@@ -92,10 +92,10 @@ public class Productpage extends AppCompatActivity {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains(value)) {
-                    donorLabel.setText("Donates to non-profits: True");
+                    donorLabel.setText("Donates to non-profits.");
                     break;
                 } else {
-                    donorLabel.setText("Donates to non-profits: False");
+                    donorLabel.setText("Does not donate.");
                 }
             }
 
