@@ -129,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            txtView.setText(brand);
+            txtView.setText("Barcode");
+            txtView.setTextSize(30);
         } catch (Exception e) {
             e.printStackTrace();
         }
