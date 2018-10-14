@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView myImageView = (ImageView) findViewById(R.id.imgview);
         Bitmap myBitmap = BitmapFactory.decodeResource(
                 getApplicationContext().getResources(),
-                R.drawable.cheez);
+                R.drawable.coke);
         myImageView.setImageBitmap(myBitmap);
 
         BarcodeDetector detector =

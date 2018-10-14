@@ -47,7 +47,7 @@ public class Productpage extends AppCompatActivity {
 
         TextView emissionsLabel = (TextView) cPP.findViewById(R.id.emissions);
 
-        if (value.equals("Coca Cola")) {
+        if (value.equals("Coca-Cola")) {
             commitLabel.setText("Commits to reducing agricultural emissions.");
             emissionsLabel.setText("Currently emits 523 thousand metric tons of carbon dioxide.");
         }
