@@ -40,6 +40,7 @@ public class Productpage extends AppCompatActivity {
 
         TextView crueltyLabel = (TextView) cPP.findViewById(R.id.cruelty);
 
+        TextView donorLabel = (TextView) cPP.findViewById(R.id.donors);
 //        String crueltyCo = "";
 //        try (BufferedReader reader = new BufferedReader(
 //                new InputStreamReader(getAssets().open("CrueltyCompanies.json")))) {
@@ -74,9 +75,27 @@ public class Productpage extends AppCompatActivity {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains(value)) {
-                    crueltyLabel.setText("Tests on animals");
+                    crueltyLabel.setText("Animal Cruelty: True");
+                    break;
                 } else {
-                    crueltyLabel.setText("Cruelty-free");
+                    crueltyLabel.setText("Animal Cruelty: False");
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(getAssets().open("donors.txt")))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains(value)) {
+                    donorLabel.setText("Donates to non-profits: True");
+                    break;
+                } else {
+                    donorLabel.setText("Donates to non-profits: False");
                 }
             }
 
