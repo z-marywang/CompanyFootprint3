@@ -1,5 +1,6 @@
 # CompanyFootprint3
 App prototype for HackDuke 2018
+
 Created with team members from NC State and Duke University
 
 Inspiration
