@@ -3,6 +3,7 @@ App prototype for HackDuke 2018
 
 Created with team members from NC State and Duke University
 
+
 Inspiration
 
 When we go to the grocery store, we often don't think about the actions of companies that we are 
